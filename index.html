@@ -7,16 +7,12 @@
 
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#8b0000">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <style>
 @font-face{
-    font-family:'BringRace';
-    src:url('BringRace.woff2') format('woff2');
-    font-weight:400;
-    font-style:normal;
-    font-display:block;
+    font-family:"TazzoFont";
+    src:url("BringRace.woff2");
+    font-display:swap;
 }
 
 *{
@@ -26,16 +22,20 @@
     font-family:Arial, sans-serif;
 }
 
+html, body{
+    width:100%;
+    min-height:100%;
+    overflow-y:auto;
+}
+
 body{
-    min-height:100vh;
     display:flex;
     justify-content:center;
-    align-items:center;
-    background:linear-gradient(135deg, #120000, #8b0000, #1a0000);
+    align-items:flex-start;
+    background:linear-gradient(135deg,#180000,#8b0000,#1a0000);
     background-size:400% 400%;
     animation:bgMove 10s ease infinite;
-    padding:20px;
-    overflow:hidden;
+    padding:30px 15px;
 }
 
 @keyframes bgMove{
@@ -44,139 +44,94 @@ body{
     100%{background-position:0% 50%;}
 }
 
-.splash{
-    position:fixed;
-    inset:0;
-    background:linear-gradient(135deg, #120000, #8b0000, #1a0000);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    z-index:999;
-    animation:fadeOut 2.5s forwards;
-    animation-delay:1.8s;
-}
-
-.splash-logo{
-    font-size:56px;
-    font-family:'BringRace' !important;
-    letter-spacing:3px;
-    animation:zoomIn 1.5s ease;
-}
-
-@keyframes zoomIn{
-    from{
-        opacity:0;
-        transform:scale(0.5);
-    }
-    to{
-        opacity:1;
-        transform:scale(1);
-    }
-}
-
-@keyframes fadeOut{
-    to{
-        opacity:0;
-        visibility:hidden;
-    }
-}
-
-@keyframes slideUp{
-    from{
-        opacity:0;
-        transform:translateY(50px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-.white{color:white;}
-.red{color:red;}
-
 .app{
     width:100%;
-    max-width:430px;
-    backdrop-filter:blur(14px);
+    max-width:380px;
+    backdrop-filter:blur(12px);
     background:rgba(255,255,255,0.08);
-    border:1px solid rgba(255,0,0,0.3);
-    box-shadow:0 0 35px rgba(255,0,0,0.2);
-    border-radius:24px;
-    padding:30px;
-    animation:slideUp 1s ease;
+    border:1px solid rgba(255,0,0,0.25);
+    box-shadow:0 0 25px rgba(255,0,0,0.2);
+    border-radius:20px;
+    padding:24px;
+    margin:auto;
 }
 
 .logo{
     text-align:center;
-    font-size:42px;
-    font-family:'BringRace' !important;
-    letter-spacing:2px;
+    font-size:34px;
+    font-family:"TazzoFont", Arial, sans-serif !important;
     margin-bottom:8px;
+    line-height:1;
+    color:white;
+}
+
+.font-test{
+    text-align:center;
+    font-size:20px;
+    font-family:"TazzoFont", Arial, sans-serif !important;
+    color:#ffffff;
+    margin-bottom:16px;
 }
 
 .subtitle{
     text-align:center;
     color:#eee;
-    margin-bottom:20px;
-    font-size:14px;
+    margin-bottom:18px;
+    font-size:13px;
 }
 
 #installBtn{
     width:100%;
-    padding:16px;
-    margin-bottom:20px;
+    padding:14px;
+    margin-bottom:18px;
     border:none;
-    border-radius:14px;
+    border-radius:12px;
     background:linear-gradient(90deg,#ff0000,#8b0000);
     color:white;
-    font-size:18px;
+    font-size:16px;
     font-weight:bold;
+    cursor:pointer;
 }
 
 label{
     display:block;
     color:white;
-    margin-bottom:8px;
-    font-size:14px;
+    margin-bottom:6px;
+    font-size:13px;
 }
 
 input, select{
     width:100%;
-    padding:16px;
-    margin-bottom:16px;
+    padding:14px;
+    margin-bottom:14px;
     border:none;
-    border-radius:14px;
+    border-radius:12px;
     background:rgba(0,0,0,0.35);
     color:white;
-    font-size:18px;
+    font-size:16px;
     text-align:center;
     outline:none;
 }
 
-input:focus, select:focus{
-    box-shadow:0 0 10px rgba(255,0,0,0.4);
-}
-
 .resultado{
-    margin-top:20px;
-    padding:20px;
-    border-radius:18px;
+    margin-top:16px;
+    padding:18px;
+    border-radius:14px;
     background:rgba(255,255,255,0.05);
-    border:1px solid rgba(255,0,0,0.2);
 }
 
 .resultado h2{
     text-align:center;
     color:white;
-    margin-bottom:14px;
+    margin-bottom:10px;
+    font-size:18px;
 }
 
 .linha{
     display:flex;
     justify-content:space-between;
-    margin:10px 0;
-    font-size:18px;
+    margin:8px 0;
+    font-size:16px;
 }
 
 .label{
@@ -187,20 +142,25 @@ input:focus, select:focus{
     color:#ff3b3b;
     font-weight:bold;
 }
+
+@media (min-width:768px){
+    .app{
+        max-width:420px;
+        padding:28px;
+    }
+
+    .logo{
+        font-size:38px;
+    }
+}
 </style>
 </head>
 <body>
 
-<div class="splash">
-    <div class="splash-logo">
-        <span class="white">TA</span><span class="red">ZZ</span><span class="white">O</span>
-    </div>
-</div>
-
 <div class="app">
-    <div class="logo">
-        <span class="white">TA</span><span class="red">ZZ</span><span class="white">O</span>
-    </div>
+    <div class="logo">TAZZO</div>
+
+    <div class="font-test">TESTE FONTE</div>
 
     <div class="subtitle">Calculadora Profissional de Diluição</div>
 
@@ -220,12 +180,10 @@ input:focus, select:focus{
 
     <div class="resultado">
         <h2>Resultado</h2>
-
         <div class="linha">
             <span class="label">Produto</span>
             <span class="valor" id="produto">0 ml</span>
         </div>
-
         <div class="linha">
             <span class="label">Água</span>
             <span class="valor" id="agua">0 ml</span>
@@ -245,29 +203,24 @@ function calcular() {
         return;
     }
 
-    if (unidade === "l") {
-        volume = volume * 1000;
-    }
+    if (unidade === "l") volume *= 1000;
 
-    let partes = dil.split(":");
-    let divisor = parseFloat(partes[1]);
-
-    if (isNaN(divisor) || divisor <= 0) return;
+    let divisor = parseFloat(dil.split(":")[1]);
 
     let produto = volume / divisor;
     let agua = volume - produto;
 
-    document.getElementById("produto").innerHTML = produto.toFixed(1) + " ml";
-    document.getElementById("agua").innerHTML = agua.toFixed(1) + " ml";
+    document.getElementById("produto").innerHTML = produto.toFixed(1)+" ml";
+    document.getElementById("agua").innerHTML = agua.toFixed(1)+" ml";
 }
 
 document.getElementById("diluicao").addEventListener("input", calcular);
 document.getElementById("volume").addEventListener("input", calcular);
 document.getElementById("unidade").addEventListener("change", calcular);
 
-document.getElementById("installBtn").addEventListener("click", function(){
-    alert("No iPhone: toque em Compartilhar → Adicionar à Tela de Início");
-});
+document.getElementById("installBtn").onclick = function(){
+    alert("No iPhone: Compartilhar → Adicionar à Tela de Início");
+};
 </script>
 
 </body>
