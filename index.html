@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAZZO | Calculadora Premium</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#8b0000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg, #120000, #8b0000, #1a0000);
+    background-size:400% 400%;
+    animation:bgMove 10s ease infinite;
+    padding:20px;
+    overflow:hidden;
+}
+
+@keyframes bgMove{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+.splash{
+    position:fixed;
+    inset:0;
+    background:linear-gradient(135deg, #120000, #8b0000, #1a0000);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+    animation:fadeOut 2.5s forwards;
+    animation-delay:1.8s;
+}
+
+.splash-logo{
+    font-size:48px;
+    font-weight:900;
+    letter-spacing:3px;
+    animation:zoomIn 1.5s ease;
+}
+
+@keyframes zoomIn{
+    from{
+        opacity:0;
+        transform:scale(0.5);
+    }
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+@keyframes fadeOut{
+    to{
+        opacity:0;
+        visibility:hidden;
+    }
+}
+
+.white{color:white;}
+.red{color:red;}
+
+.app{
+    width:100%;
+    max-width:430px;
+    backdrop-filter:blur(14px);
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,0,0,0.3);
+    box-shadow:0 0 35px rgba(255,0,0,0.2);
+    border-radius:24px;
+    padding:30px;
+    animation:slideUp 1s ease;
+}
+
+@keyframes slideUp{
+    from{
+        opacity:0;
+        transform:translateY(50px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.logo{
+    text-align:center;
+    font-size:34px;
+    font-weight:900;
+    margin-bottom:8px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#eee;
+    margin-bottom:20px;
+    font-size:14px;
+}
+
+#installBtn{
+    width:100%;
+    padding:16px;
+    margin-bottom:20px;
+    border:none;
+    border-radius:14px;
+    background:linear-gradient(90deg,#ff0000,#8b0000);
+    color:white;
+    font-size:18px;
+    font-weight:bold;
+}
+
+label{
+    display:block;
+    color:white;
+    margin-bottom:8px;
+    font-size:14px;
+}
+
+input, select{
+    width:100%;
+    padding:16px;
+    margin-bottom:16px;
+    border:none;
+    border-radius:14px;
+    background:rgba(0,0,0,0.35);
+    color:white;
+    font-size:18px;
+    text-align:center;
+    outline:none;
+}
+
+.resultado{
+    margin-top:20px;
+    padding:20px;
+    border-radius:18px;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,0,0,0.2);
+}
+
+.resultado h2{
+    text-align:center;
+    color:white;
+    margin-bottom:14px;
+}
+
+.linha{
+    display:flex;
+    justify-content:space-between;
+    margin:10px 0;
+    font-size:18px;
+}
+
+.label{
+    color:#ddd;
+}
+
+.valor{
+    color:#ff3b3b;
+    font-weight:bold;
+}
+</style>
+</head>
+<body>
+
+<div class="splash">
+    <div class="splash-logo">
+        <span class="white">TA</span><span class="red">ZZ</span><span class="white">O</span>
+    </div>
+</div>
+
+<div class="app">
+    <div class="logo">
+        <span class="white">TA</span><span class="red">ZZ</span><span class="white">O</span>
+    </div>
+
+    <div class="subtitle">Calculadora Profissional de Diluição</div>
+
+    <button id="installBtn">Instalar App</button>
+
+    <label>Diluição</label>
+    <input type="text" id="diluicao" placeholder="Ex: 1:20">
+
+    <label>Volume</label>
+    <input type="number" id="volume" placeholder="Ex: 2000">
+
+    <label>Unidade</label>
+    <select id="unidade">
+        <option value="ml">Mililitros (ml)</option>
+        <option value="l">Litros (L)</option>
+    </select>
+
+    <div class="resultado">
+        <h2>Resultado</h2>
+
+        <div class="linha">
+            <span class="label">Produto</span>
+            <span class="valor" id="produto">0 ml</span>
+        </div>
+
+        <div class="linha">
+            <span class="label">Água</span>
+            <span class="valor" id="agua">0 ml</span>
+        </div>
+    </div>
+</div>
+
+<script>
+function calcular() {
+    let dil = document.getElementById("diluicao").value.trim();
+    let volume = parseFloat(document.getElementById("volume").value);
+    let unidade = document.getElementById("unidade").value;
+
+    if (!dil.includes(":") || isNaN(volume) || volume <= 0) {
+        document.getElementById("produto").innerHTML = "0 ml";
+        document.getElementById("agua").innerHTML = "0 ml";
+        return;
+    }
+
+    if (unidade === "l") {
+        volume = volume * 1000;
+    }
+
+    let partes = dil.split(":");
+    let divisor = parseFloat(partes[1]);
+
+    if (isNaN(divisor) || divisor <= 0) return;
+
+    let produto = volume / divisor;
+    let agua = volume - produto;
+
+    document.getElementById("produto").innerHTML = produto.toFixed(1) + " ml";
+    document.getElementById("agua").innerHTML = agua.toFixed(1) + " ml";
+}
+
+document.getElementById("diluicao").addEventListener("input", calcular);
+document.getElementById("volume").addEventListener("input", calcular);
+document.getElementById("unidade").addEventListener("change", calcular);
+
+document.getElementById("installBtn").addEventListener("click", function(){
+    alert("No iPhone: toque em Compartilhar → Adicionar à Tela de Início");
+});
+</script>
+
+</body>
+</html>
