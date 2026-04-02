@@ -44,6 +44,44 @@ body{
     100%{background-position:0% 50%;}
 }
 
+/* SPLASH */
+.splash{
+    position:fixed;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#180000,#8b0000,#1a0000);
+    z-index:9999;
+    animation:fadeOut 2.8s forwards;
+    animation-delay:1.5s;
+}
+
+.splash-logo{
+    font-family:"TazzoFont", sans-serif;
+    font-size:72px;
+    color:white;
+    animation:zoomSplash 1.4s ease;
+}
+
+@keyframes zoomSplash{
+    from{
+        opacity:0;
+        transform:scale(0.4);
+    }
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+@keyframes fadeOut{
+    to{
+        opacity:0;
+        visibility:hidden;
+    }
+}
+
 .app{
     width:100%;
     max-width:380px;
@@ -61,7 +99,6 @@ body{
     font-size:34px;
     font-family:"TazzoFont", Arial, sans-serif !important;
     margin-bottom:8px;
-    line-height:1;
     color:white;
 }
 
@@ -156,6 +193,10 @@ input, select{
 </style>
 </head>
 <body>
+
+<div class="splash">
+    <div class="splash-logo">TAZZO</div>
+</div>
 
 <div class="app">
     <div class="logo">TAZZO</div>
