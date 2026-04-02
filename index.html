@@ -12,8 +12,11 @@
 
 <style>
 @font-face{
-    font-family:'Bring Race';
-    src:url('Bring Race.otf') format('opentype');
+    font-family:'BringRace';
+    src:url('./BringRace.woff2') format('woff2');
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
 }
 
 *{
@@ -55,7 +58,7 @@ body{
 
 .splash-logo{
     font-size:56px;
-    font-family:'Bring Race', Arial, sans-serif;
+    font-family:'BringRace', Arial, sans-serif;
     letter-spacing:3px;
     animation:zoomIn 1.5s ease;
 }
@@ -107,7 +110,7 @@ body{
 .logo{
     text-align:center;
     font-size:42px;
-    font-family:'Bring Race', Arial, sans-serif;
+    font-family:'BringRace', Arial, sans-serif;
     letter-spacing:2px;
     margin-bottom:8px;
 }
@@ -149,6 +152,10 @@ input, select{
     font-size:18px;
     text-align:center;
     outline:none;
+}
+
+input:focus, select:focus{
+    box-shadow:0 0 10px rgba(255,0,0,0.4);
 }
 
 .resultado{
