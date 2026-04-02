@@ -11,7 +11,11 @@
 <style>
 @font-face{
     font-family:"TazzoFont";
-    src:url("BringRace.woff2");
+    src:
+        url("BringRace.woff2") format("woff2"),
+        url("BringRace.woff") format("woff");
+    font-weight:normal;
+    font-style:normal;
     font-display:swap;
 }
 
@@ -48,9 +52,8 @@ body{
 .splash{
     position:fixed;
     inset:0;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    display:grid;
+    place-items:center;
     background:linear-gradient(135deg,#180000,#8b0000,#1a0000);
     z-index:9999;
     overflow:hidden;
@@ -59,17 +62,16 @@ body{
 }
 
 .splash-logo{
-    font-family:"TazzoFont" !important;
-    font-size:72px;
     display:flex;
-    align-items:center;
     justify-content:center;
+    align-items:center;
     white-space:nowrap;
+    font-size:72px;
     animation:zoomSplash 1.4s ease;
 }
 
 .splash-logo span{
-    font-family:"TazzoFont" !important;
+    font-family:"TazzoFont", Arial, sans-serif !important;
 }
 
 .logo{
@@ -80,7 +82,7 @@ body{
 }
 
 .logo span{
-    font-family:"TazzoFont" !important;
+    font-family:"TazzoFont", Arial, sans-serif !important;
 }
 
 .white{
