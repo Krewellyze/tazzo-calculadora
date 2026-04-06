@@ -45,7 +45,6 @@ body{
     100%{background-position:0% 50%;}
 }
 
-/* SPLASH */
 .splash{
     position:fixed;
     inset:0;
@@ -97,23 +96,13 @@ body{
 }
 
 @keyframes glow{
-    from{
-        text-shadow:0 0 4px #ff0000;
-    }
-    to{
-        text-shadow:0 0 14px #ff0000,0 0 24px #ff0000;
-    }
+    from{ text-shadow:0 0 4px #ff0000; }
+    to{ text-shadow:0 0 14px #ff0000,0 0 24px #ff0000; }
 }
 
 @keyframes zoomSplash{
-    from{
-        opacity:0;
-        transform:scale(0.4);
-    }
-    to{
-        opacity:1;
-        transform:scale(1);
-    }
+    from{ opacity:0; transform:scale(0.4); }
+    to{ opacity:1; transform:scale(1); }
 }
 
 @keyframes fadeOut{
@@ -198,12 +187,6 @@ input, select{
     box-shadow:0 0 20px rgba(255,0,0,0.15);
 }
 
-.share-logo{
-    font-size:28px;
-    text-align:center;
-    margin-bottom:14px;
-}
-
 .resultado h2{
     text-align:center;
     color:white;
@@ -249,8 +232,6 @@ input, select{
 
     <div class="subtitle">Calculadora Profissional de Diluição</div>
 
-    <button id="installBtn">Instalar Calculadora</button>
-
     <div class="quick-buttons">
         <button onclick="setDil('1:10')">1:10</button>
         <button onclick="setDil('1:20')">1:20</button>
@@ -277,12 +258,8 @@ input, select{
         <option value="l">Litros (L)</option>
     </select>
 
-    <div class="resultado" id="resultadoCard">
-        <div class="share-logo">
-            <span class="white">TA</span><span class="red">ZZ</span><span class="white">O</span>
-        </div>
-
-        <h2>Resultado da Diluição</h2>
+    <div class="resultado">
+        <h2>Resultado</h2>
 
         <div class="linha">
             <span class="label">Diluição</span>
@@ -304,34 +281,10 @@ input, select{
         </div>
     </div>
 
-    <button onclick="compartilharWhatsapp()">Compartilhar no WhatsApp</button>
+    <button onclick="compartilharWhatsapp()">Compartilhar Imagem</button>
 </div>
 
 <script>
-let deferredPrompt = null;
-
-window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-});
-
-document.getElementById("installBtn").addEventListener("click", async function(){
-    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-
-    if (isIOS) {
-        alert("No iPhone: toque em Compartilhar e depois em 'Adicionar à Tela de Início'.");
-        return;
-    }
-
-    if (deferredPrompt) {
-        deferredPrompt.prompt();
-        await deferredPrompt.userChoice;
-        deferredPrompt = null;
-    } else {
-        alert("A instalação ficará disponível após alguns segundos de uso da página.");
-    }
-});
-
 function setDil(valor){
     document.getElementById("diluicao").value = valor;
     calcular();
@@ -366,33 +319,94 @@ function calcular() {
 }
 
 async function compartilharWhatsapp(){
-    const card = document.getElementById("resultadoCard");
+    const dil = document.getElementById("dilShow").innerText;
+    const produto = document.getElementById("produto").innerText;
+    const agua = document.getElementById("agua").innerText;
+    const rendimento = document.getElementById("rendimento").innerText;
 
-    const canvas = await html2canvas(card,{
-        scale:2,
-        backgroundColor:null
-    });
+    const story = document.createElement("div");
+
+    story.style.width = "1080px";
+    story.style.height = "1920px";
+    story.style.position = "fixed";
+    story.style.left = "-9999px";
+    story.style.top = "0";
+    story.style.background = "linear-gradient(180deg,#1a0000,#8b0000)";
+    story.style.display = "flex";
+    story.style.justifyContent = "center";
+    story.style.alignItems = "center";
+    story.style.padding = "80px";
+    story.style.fontFamily = "Arial, sans-serif";
+
+    story.innerHTML = `
+        <div style="
+            width:100%;
+            max-width:860px;
+            border-radius:40px;
+            padding:80px;
+            background:rgba(255,255,255,0.06);
+            border:2px solid rgba(255,255,255,0.12);
+            box-shadow:0 0 60px rgba(255,0,0,0.25);
+        ">
+            <div style="
+                text-align:center;
+                font-size:110px;
+                margin-bottom:70px;
+                font-family:'Bring Race', sans-serif;
+            ">
+                <span style="color:white;">TA</span><span style="color:#ff0000;">ZZ</span><span style="color:white;">O</span>
+            </div>
+
+            <div style="
+                text-align:center;
+                font-size:58px;
+                color:white;
+                margin-bottom:60px;
+                font-weight:bold;
+            ">
+                RESULTADO DA DILUIÇÃO
+            </div>
+
+            <div style="
+                display:grid;
+                grid-template-columns:1fr 1fr;
+                border:2px solid rgba(255,255,255,0.12);
+                border-radius:24px;
+                overflow:hidden;
+            ">
+                <div style="padding:45px;border-right:2px solid rgba(255,255,255,0.12);border-bottom:2px solid rgba(255,255,255,0.12);color:#ccc;font-size:42px;">Diluição</div>
+                <div style="padding:45px;border-bottom:2px solid rgba(255,255,255,0.12);color:white;font-size:42px;font-weight:bold;text-align:right;">${dil}</div>
+
+                <div style="padding:45px;border-right:2px solid rgba(255,255,255,0.12);border-bottom:2px solid rgba(255,255,255,0.12);color:#ccc;font-size:42px;">Produto</div>
+                <div style="padding:45px;border-bottom:2px solid rgba(255,255,255,0.12);color:white;font-size:42px;font-weight:bold;text-align:right;">${produto}</div>
+
+                <div style="padding:45px;border-right:2px solid rgba(255,255,255,0.12);border-bottom:2px solid rgba(255,255,255,0.12);color:#ccc;font-size:42px;">Água</div>
+                <div style="padding:45px;border-bottom:2px solid rgba(255,255,255,0.12);color:white;font-size:42px;font-weight:bold;text-align:right;">${agua}</div>
+
+                <div style="padding:45px;border-right:2px solid rgba(255,255,255,0.12);color:#ccc;font-size:42px;">Rendimento</div>
+                <div style="padding:45px;color:white;font-size:42px;font-weight:bold;text-align:right;">${rendimento}</div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(story);
+
+    const canvas = await html2canvas(story,{scale:1,useCORS:true});
+
+    document.body.removeChild(story);
 
     canvas.toBlob(async function(blob){
-        const file = new File([blob], "resultado-tazzo.png", {
-            type: "image/png"
+        const file = new File([blob], "story-tazzo-premium.png", {
+            type:"image/png"
         });
 
         if (navigator.canShare && navigator.canShare({ files:[file] })) {
-            await navigator.share({
-                title:"TAZZO",
-                text:"Resultado da diluição",
-                files:[file]
-            });
+            await navigator.share({ files:[file] });
         } else {
-            alert("Compartilhamento de imagem não suportado neste navegador.");
+            alert("Seu navegador não suporta compartilhamento de imagem.");
         }
-    });
+    }, "image/png");
 }
-
-document.getElementById("diluicao").addEventListener("input", calcular);
-document.getElementById("volume").addEventListener("input", calcular);
-document.getElementById("unidade").addEventListener("change", calcular);
 </script>
 
 </body>
