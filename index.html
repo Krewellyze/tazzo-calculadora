@@ -45,6 +45,7 @@ body{
     100%{background-position:0% 50%;}
 }
 
+/* SPLASH */
 .splash{
     position:fixed;
     inset:0;
@@ -96,13 +97,23 @@ body{
 }
 
 @keyframes glow{
-    from{ text-shadow:0 0 4px #ff0000; }
-    to{ text-shadow:0 0 14px #ff0000,0 0 24px #ff0000; }
+    from{
+        text-shadow:0 0 4px #ff0000;
+    }
+    to{
+        text-shadow:0 0 14px #ff0000,0 0 24px #ff0000;
+    }
 }
 
 @keyframes zoomSplash{
-    from{ opacity:0; transform:scale(0.4); }
-    to{ opacity:1; transform:scale(1); }
+    from{
+        opacity:0;
+        transform:scale(0.4);
+    }
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
 }
 
 @keyframes fadeOut{
@@ -238,6 +249,8 @@ input, select{
 
     <div class="subtitle">Calculadora Profissional de Diluição</div>
 
+    <button id="installBtn">Instalar Calculadora</button>
+
     <div class="quick-buttons">
         <button onclick="setDil('1:10')">1:10</button>
         <button onclick="setDil('1:20')">1:20</button>
@@ -291,10 +304,34 @@ input, select{
         </div>
     </div>
 
-    <button onclick="compartilharWhatsapp()">Compartilhar Imagem</button>
+    <button onclick="compartilharWhatsapp()">Compartilhar no WhatsApp</button>
 </div>
 
 <script>
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+});
+
+document.getElementById("installBtn").addEventListener("click", async function(){
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+    if (isIOS) {
+        alert("No iPhone: toque em Compartilhar e depois em 'Adicionar à Tela de Início'.");
+        return;
+    }
+
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        deferredPrompt = null;
+    } else {
+        alert("A instalação ficará disponível após alguns segundos de uso da página.");
+    }
+});
+
 function setDil(valor){
     document.getElementById("diluicao").value = valor;
     calcular();
@@ -329,60 +366,33 @@ function calcular() {
 }
 
 async function compartilharWhatsapp(){
-    const story = document.createElement("div");
-    story.style.width = "1080px";
-    story.style.height = "1920px";
-    story.style.position = "fixed";
-    story.style.left = "-9999px";
-    story.style.top = "0";
-    story.style.background = "linear-gradient(180deg,#1a0000,#8b0000)";
-    story.style.padding = "120px";
-    story.style.display = "flex";
-    story.style.flexDirection = "column";
-    story.style.justifyContent = "center";
-    story.style.color = "white";
-    story.style.fontFamily = "Arial";
+    const card = document.getElementById("resultadoCard");
 
-    story.innerHTML = `
-        <div style="font-size:120px;text-align:center;margin-bottom:120px;font-family:'Bring Race',sans-serif;">
-            <span style="color:white;">TA</span><span style="color:red;">ZZ</span><span style="color:white;">O</span>
-        </div>
-
-        <div style="font-size:80px;text-align:center;margin-bottom:100px;">
-            Resultado da Diluição
-        </div>
-
-        <div style="font-size:70px;line-height:1.8;text-align:center;">
-            Diluição: ${document.getElementById("dilShow").innerText}<br>
-            Produto: ${document.getElementById("produto").innerText}<br>
-            Água: ${document.getElementById("agua").innerText}<br><br>
-            ${document.getElementById("rendimento").innerText}
-        </div>
-    `;
-
-    document.body.appendChild(story);
-
-    const canvas = await html2canvas(story,{
-        scale:1,
-        useCORS:true
+    const canvas = await html2canvas(card,{
+        scale:2,
+        backgroundColor:null
     });
 
-    document.body.removeChild(story);
-
     canvas.toBlob(async function(blob){
-        const file = new File([blob], "story-tazzo.png", {
-            type:"image/png"
+        const file = new File([blob], "resultado-tazzo.png", {
+            type: "image/png"
         });
 
         if (navigator.canShare && navigator.canShare({ files:[file] })) {
             await navigator.share({
+                title:"TAZZO",
+                text:"Resultado da diluição",
                 files:[file]
             });
         } else {
-            alert("Seu navegador não suporta compartilhamento de imagem.");
+            alert("Compartilhamento de imagem não suportado neste navegador.");
         }
-    }, "image/png");
+    });
 }
+
+document.getElementById("diluicao").addEventListener("input", calcular);
+document.getElementById("volume").addEventListener("input", calcular);
+document.getElementById("unidade").addEventListener("change", calcular);
 </script>
 
 </body>
