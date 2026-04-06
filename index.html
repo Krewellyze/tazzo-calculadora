@@ -20,117 +20,40 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial, sans-serif;
-}
-
-html, body{
-    width:100%;
-    min-height:100%;
-    overflow-y:auto;
+    font-family:Arial,sans-serif;
 }
 
 body{
     display:flex;
     justify-content:center;
     align-items:flex-start;
+    min-height:100vh;
     background:linear-gradient(135deg,#180000,#8b0000,#1a0000);
-    background-size:400% 400%;
-    animation:bgMove 10s ease infinite;
     padding:30px 15px;
-}
-
-@keyframes bgMove{
-    0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
-    100%{background-position:0% 50%;}
-}
-
-.splash{
-    position:fixed;
-    inset:0;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:0 16px;
-    background:linear-gradient(135deg,#180000,#8b0000,#1a0000);
-    z-index:9999;
-    animation:fadeOut 2.8s forwards;
-    animation-delay:1.5s;
-}
-
-.splash-logo,
-.logo{
-    white-space:nowrap;
-    text-align:center;
-}
-
-.splash-logo{
-    font-size:clamp(52px, 16vw, 68px);
-    padding:0 12px;
-    width:100%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    animation:zoomSplash 1.4s ease;
-}
-
-.splash-logo span,
-.logo span,
-.share-logo span{
-    font-family:'Bring Race', sans-serif !important;
-}
-
-.logo{
-    font-size:34px;
-    margin-bottom:12px;
-}
-
-.red{
-    color:#ff0000;
-    text-shadow:0 0 6px #ff0000, 0 0 12px #ff0000;
-    animation:glow 1.8s ease-in-out infinite alternate;
-}
-
-.white{
-    color:white;
-}
-
-@keyframes glow{
-    from{ text-shadow:0 0 4px #ff0000; }
-    to{ text-shadow:0 0 14px #ff0000,0 0 24px #ff0000; }
-}
-
-@keyframes zoomSplash{
-    from{ opacity:0; transform:scale(0.4); }
-    to{ opacity:1; transform:scale(1); }
-}
-
-@keyframes fadeOut{
-    to{
-        opacity:0;
-        visibility:hidden;
-        pointer-events:none;
-    }
 }
 
 .app{
     width:100%;
     max-width:400px;
-    backdrop-filter:blur(12px);
     background:rgba(255,255,255,0.08);
     border:1px solid rgba(255,0,0,0.25);
     box-shadow:0 0 25px rgba(255,0,0,0.2);
     border-radius:20px;
     padding:24px;
-    margin:auto;
 }
 
-.subtitle{
+.logo{
+    font-size:34px;
     text-align:center;
-    color:#eee;
-    margin-bottom:18px;
-    font-size:13px;
+    margin-bottom:16px;
 }
+
+.logo span{
+    font-family:'Bring Race',sans-serif !important;
+}
+
+.white{color:white;}
+.red{color:#ff0000;}
 
 button{
     width:100%;
@@ -142,7 +65,6 @@ button{
     color:white;
     font-size:16px;
     font-weight:bold;
-    cursor:pointer;
 }
 
 .quick-buttons{
@@ -158,14 +80,7 @@ button{
     margin:0;
 }
 
-label{
-    display:block;
-    color:white;
-    margin-bottom:6px;
-    font-size:13px;
-}
-
-input, select{
+input,select{
     width:100%;
     padding:14px;
     margin-bottom:14px;
@@ -175,7 +90,6 @@ input, select{
     color:white;
     font-size:16px;
     text-align:center;
-    outline:none;
 }
 
 .resultado{
@@ -183,54 +97,22 @@ input, select{
     padding:18px;
     border-radius:14px;
     background:linear-gradient(135deg,#4d0000,#8b0000);
-    border:1px solid rgba(255,255,255,0.08);
-    box-shadow:0 0 20px rgba(255,0,0,0.15);
-}
-
-.resultado h2{
-    text-align:center;
-    color:white;
-    margin-bottom:10px;
 }
 
 .linha{
     display:flex;
     justify-content:space-between;
     margin:8px 0;
-    font-size:16px;
-}
-
-.label{
-    color:#ddd;
-}
-
-.valor{
-    color:#fff;
-    font-weight:bold;
-}
-
-.rendimento{
-    margin-top:12px;
     color:white;
-    text-align:center;
-    font-size:14px;
 }
 </style>
 </head>
 <body>
 
-<div class="splash">
-    <div class="splash-logo">
-        <span class="white">TA</span><span class="red">ZZ</span><span class="white">O</span>
-    </div>
-</div>
-
 <div class="app">
     <div class="logo">
         <span class="white">TA</span><span class="red">ZZ</span><span class="white">O</span>
     </div>
-
-    <div class="subtitle">Calculadora Profissional de Diluição</div>
 
     <div class="quick-buttons">
         <button onclick="setDil('1:10')">1:10</button>
@@ -239,45 +121,33 @@ input, select{
         <button onclick="setDil('1:50')">1:50</button>
     </div>
 
-    <div class="quick-buttons">
-        <button onclick="setVolume(500)">500ml</button>
-        <button onclick="setVolume(1000)">1L</button>
-        <button onclick="setVolume(2000)">2L</button>
-        <button onclick="setVolume(5000)">5L</button>
-    </div>
-
-    <label>Diluição</label>
     <input type="text" id="diluicao" placeholder="Ex: 1:20">
-
-    <label>Volume</label>
     <input type="number" id="volume" placeholder="Ex: 2000">
 
-    <label>Unidade</label>
     <select id="unidade">
         <option value="ml">Mililitros (ml)</option>
         <option value="l">Litros (L)</option>
     </select>
 
     <div class="resultado">
-        <h2>Resultado</h2>
-
         <div class="linha">
-            <span class="label">Diluição</span>
-            <span class="valor" id="dilShow">-</span>
+            <span>Diluição</span>
+            <span id="dilShow">-</span>
         </div>
 
         <div class="linha">
-            <span class="label">Produto</span>
-            <span class="valor" id="produto">0 ml</span>
+            <span>Produto</span>
+            <span id="produto">0 ml</span>
         </div>
 
         <div class="linha">
-            <span class="label">Água</span>
-            <span class="valor" id="agua">0 ml</span>
+            <span>Água</span>
+            <span id="agua">0 ml</span>
         </div>
 
-        <div class="rendimento" id="rendimento">
-            Rendimento: 0 L
+        <div class="linha">
+            <span>Rendimento</span>
+            <span id="rendimento">0 L</span>
         </div>
     </div>
 
@@ -290,32 +160,25 @@ function setDil(valor){
     calcular();
 }
 
-function setVolume(valor){
-    document.getElementById("volume").value = valor;
-    document.getElementById("unidade").value = "ml";
-    calcular();
-}
-
-function calcular() {
+function calcular(){
     let dil = document.getElementById("diluicao").value.trim();
     let volume = parseFloat(document.getElementById("volume").value);
     let unidade = document.getElementById("unidade").value;
 
-    if (!dil.includes(":") || isNaN(volume) || volume <= 0) return;
+    if(!dil.includes(":") || isNaN(volume)) return;
 
-    if (unidade === "l") volume *= 1000;
+    if(unidade==="l") volume*=1000;
 
-    let divisor = parseFloat(dil.split(":")[1]);
+    let divisor=parseFloat(dil.split(":")[1]);
 
-    let produto = volume / divisor;
-    let agua = volume - produto;
-    let rendimento = (500 / produto).toFixed(1);
+    let produto=volume/divisor;
+    let agua=volume-produto;
+    let rendimento=(500/produto).toFixed(1);
 
-    document.getElementById("dilShow").innerHTML = dil;
-    document.getElementById("produto").innerHTML = produto.toFixed(1)+" ml";
-    document.getElementById("agua").innerHTML = agua.toFixed(1)+" ml";
-    document.getElementById("rendimento").innerHTML =
-        "500ml rende até " + rendimento + "L";
+    document.getElementById("dilShow").innerText=dil;
+    document.getElementById("produto").innerText=produto.toFixed(1)+" ml";
+    document.getElementById("agua").innerText=agua.toFixed(1)+" ml";
+    document.getElementById("rendimento").innerText="500ml rende até "+rendimento+"L";
 }
 
 async function compartilharWhatsapp(){
@@ -326,19 +189,17 @@ async function compartilharWhatsapp(){
 
     const story = document.createElement("div");
 
-    story.style.width = "1080px";
-    story.style.height = "1920px";
-    story.style.position = "fixed";
-    story.style.left = "-9999px";
-    story.style.top = "0";
-    story.style.background = "linear-gradient(180deg,#1a0000,#8b0000)";
-    story.style.display = "flex";
-    story.style.justifyContent = "center";
-    story.style.alignItems = "center";
-    story.style.padding = "80px";
-    story.style.fontFamily = "Arial, sans-serif";
+    story.style.width="1080px";
+    story.style.height="1920px";
+    story.style.position="fixed";
+    story.style.left="-9999px";
+    story.style.background="linear-gradient(180deg,#1a0000,#8b0000)";
+    story.style.display="flex";
+    story.style.justifyContent="center";
+    story.style.alignItems="center";
+    story.style.padding="80px";
 
-    story.innerHTML = `
+    story.innerHTML=`
         <div style="
             width:100%;
             max-width:860px;
@@ -348,13 +209,26 @@ async function compartilharWhatsapp(){
             border:2px solid rgba(255,255,255,0.12);
             box-shadow:0 0 60px rgba(255,0,0,0.25);
         ">
-            <div style="
-                text-align:center;
-                font-size:110px;
-                margin-bottom:70px;
-                font-family:'Bring Race', sans-serif;
-            ">
-                <span style="color:white;">TA</span><span style="color:#ff0000;">ZZ</span><span style="color:white;">O</span>
+
+            <div style="text-align:center;margin-bottom:70px;">
+                <svg width="600" height="120" viewBox="0 0 600 120">
+                    <text x="50%" y="50%"
+                          dominant-baseline="middle"
+                          text-anchor="middle"
+                          font-size="80"
+                          font-family="Arial"
+                          fill="white">TA</text>
+
+                    <text x="320" y="60"
+                          font-size="80"
+                          font-family="Arial"
+                          fill="red">ZZ</text>
+
+                    <text x="430" y="60"
+                          font-size="80"
+                          font-family="Arial"
+                          fill="white">O</text>
+                </svg>
             </div>
 
             <div style="
@@ -374,39 +248,39 @@ async function compartilharWhatsapp(){
                 border-radius:24px;
                 overflow:hidden;
             ">
-                <div style="padding:45px;border-right:2px solid rgba(255,255,255,0.12);border-bottom:2px solid rgba(255,255,255,0.12);color:#ccc;font-size:42px;">Diluição</div>
-                <div style="padding:45px;border-bottom:2px solid rgba(255,255,255,0.12);color:white;font-size:42px;font-weight:bold;text-align:right;">${dil}</div>
+                <div style="padding:45px;border-right:1px solid rgba(255,255,255,0.12);border-bottom:1px solid rgba(255,255,255,0.12);color:#ccc;font-size:42px;">Diluição</div>
+                <div style="padding:45px;border-bottom:1px solid rgba(255,255,255,0.12);color:white;font-size:42px;text-align:right;font-weight:bold;">${dil}</div>
 
-                <div style="padding:45px;border-right:2px solid rgba(255,255,255,0.12);border-bottom:2px solid rgba(255,255,255,0.12);color:#ccc;font-size:42px;">Produto</div>
-                <div style="padding:45px;border-bottom:2px solid rgba(255,255,255,0.12);color:white;font-size:42px;font-weight:bold;text-align:right;">${produto}</div>
+                <div style="padding:45px;border-right:1px solid rgba(255,255,255,0.12);border-bottom:1px solid rgba(255,255,255,0.12);color:#ccc;font-size:42px;">Produto</div>
+                <div style="padding:45px;border-bottom:1px solid rgba(255,255,255,0.12);color:white;font-size:42px;text-align:right;font-weight:bold;">${produto}</div>
 
-                <div style="padding:45px;border-right:2px solid rgba(255,255,255,0.12);border-bottom:2px solid rgba(255,255,255,0.12);color:#ccc;font-size:42px;">Água</div>
-                <div style="padding:45px;border-bottom:2px solid rgba(255,255,255,0.12);color:white;font-size:42px;font-weight:bold;text-align:right;">${agua}</div>
+                <div style="padding:45px;border-right:1px solid rgba(255,255,255,0.12);border-bottom:1px solid rgba(255,255,255,0.12);color:#ccc;font-size:42px;">Água</div>
+                <div style="padding:45px;border-bottom:1px solid rgba(255,255,255,0.12);color:white;font-size:42px;text-align:right;font-weight:bold;">${agua}</div>
 
-                <div style="padding:45px;border-right:2px solid rgba(255,255,255,0.12);color:#ccc;font-size:42px;">Rendimento</div>
-                <div style="padding:45px;color:white;font-size:42px;font-weight:bold;text-align:right;">${rendimento}</div>
+                <div style="padding:45px;border-right:1px solid rgba(255,255,255,0.12);color:#ccc;font-size:42px;">Rendimento</div>
+                <div style="padding:45px;color:white;font-size:42px;text-align:right;font-weight:bold;">${rendimento}</div>
             </div>
         </div>
     `;
 
     document.body.appendChild(story);
 
-    const canvas = await html2canvas(story,{scale:1,useCORS:true});
+    const canvas=await html2canvas(story,{scale:1,useCORS:true});
 
     document.body.removeChild(story);
 
     canvas.toBlob(async function(blob){
-        const file = new File([blob], "story-tazzo-premium.png", {
-            type:"image/png"
-        });
+        const file=new File([blob],"story-tazzo-premium.png",{type:"image/png"});
 
-        if (navigator.canShare && navigator.canShare({ files:[file] })) {
-            await navigator.share({ files:[file] });
-        } else {
-            alert("Seu navegador não suporta compartilhamento de imagem.");
+        if(navigator.canShare && navigator.canShare({files:[file]})){
+            await navigator.share({files:[file]});
         }
-    }, "image/png");
+    },"image/png");
 }
+
+document.getElementById("diluicao").addEventListener("input",calcular);
+document.getElementById("volume").addEventListener("input",calcular);
+document.getElementById("unidade").addEventListener("change",calcular);
 </script>
 
 </body>
