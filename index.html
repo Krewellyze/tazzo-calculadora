@@ -13,6 +13,7 @@
 <meta name="apple-mobile-web-app-title" content="TAZZO">
 
 <link href="https://fonts.cdnfonts.com/css/bring-race" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
 *{
@@ -75,7 +76,8 @@ body{
 }
 
 .splash-logo span,
-.logo span{
+.logo span,
+.share-logo span{
     font-family:'Bring Race', sans-serif !important;
 }
 
@@ -191,7 +193,15 @@ input, select{
     margin-top:16px;
     padding:18px;
     border-radius:14px;
-    background:rgba(255,255,255,0.05);
+    background:linear-gradient(135deg,#4d0000,#8b0000);
+    border:1px solid rgba(255,255,255,0.08);
+    box-shadow:0 0 20px rgba(255,0,0,0.15);
+}
+
+.share-logo{
+    font-size:28px;
+    text-align:center;
+    margin-bottom:14px;
 }
 
 .resultado h2{
@@ -212,7 +222,7 @@ input, select{
 }
 
 .valor{
-    color:#ff3b3b;
+    color:#fff;
     font-weight:bold;
 }
 
@@ -267,12 +277,23 @@ input, select{
         <option value="l">Litros (L)</option>
     </select>
 
-    <div class="resultado">
-        <h2>Resultado</h2>
+    <div class="resultado" id="resultadoCard">
+        <div class="share-logo">
+            <span class="white">TA</span><span class="red">ZZ</span><span class="white">O</span>
+        </div>
+
+        <h2>Resultado da Diluição</h2>
+
+        <div class="linha">
+            <span class="label">Diluição</span>
+            <span class="valor" id="dilShow">-</span>
+        </div>
+
         <div class="linha">
             <span class="label">Produto</span>
             <span class="valor" id="produto">0 ml</span>
         </div>
+
         <div class="linha">
             <span class="label">Água</span>
             <span class="valor" id="agua">0 ml</span>
@@ -337,25 +358,36 @@ function calcular() {
     let agua = volume - produto;
     let rendimento = (500 / produto).toFixed(1);
 
+    document.getElementById("dilShow").innerHTML = dil;
     document.getElementById("produto").innerHTML = produto.toFixed(1)+" ml";
     document.getElementById("agua").innerHTML = agua.toFixed(1)+" ml";
     document.getElementById("rendimento").innerHTML =
         "500ml rende até " + rendimento + "L";
 }
 
-function compartilharWhatsapp(){
-    let produto = document.getElementById("produto").innerText;
-    let agua = document.getElementById("agua").innerText;
-    let dil = document.getElementById("diluicao").value;
+async function compartilharWhatsapp(){
+    const card = document.getElementById("resultadoCard");
 
-    let texto = encodeURIComponent(
-        "TAZZO - Resultado da Diluição\n" +
-        "Diluição: " + dil + "\n" +
-        "Produto: " + produto + "\n" +
-        "Água: " + agua
-    );
+    const canvas = await html2canvas(card,{
+        scale:2,
+        backgroundColor:null
+    });
 
-    window.open("https://wa.me/?text=" + texto, "_blank");
+    canvas.toBlob(async function(blob){
+        const file = new File([blob], "resultado-tazzo.png", {
+            type: "image/png"
+        });
+
+        if (navigator.canShare && navigator.canShare({ files:[file] })) {
+            await navigator.share({
+                title:"TAZZO",
+                text:"Resultado da diluição",
+                files:[file]
+            });
+        } else {
+            alert("Compartilhamento de imagem não suportado neste navegador.");
+        }
+    });
 }
 
 document.getElementById("diluicao").addEventListener("input", calcular);
