@@ -7,7 +7,6 @@
 
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#8b0000">
-
 <link href="https://fonts.cdnfonts.com/css/bring-race" rel="stylesheet">
 
 <style>
@@ -47,41 +46,48 @@ body{
     place-items:center;
     background:linear-gradient(135deg,#180000,#8b0000,#1a0000);
     z-index:9999;
-    overflow:hidden;
     animation:fadeOut 2.8s forwards;
     animation-delay:1.5s;
 }
 
-.splash-logo{
-    display:flex;
-    justify-content:center;
-    align-items:center;
+.splash-logo,
+.logo{
     white-space:nowrap;
+    text-align:center;
+}
+
+.splash-logo span,
+.logo span{
+    font-family:'Bring Race', sans-serif !important;
+}
+
+.splash-logo{
     font-size:72px;
     animation:zoomSplash 1.4s ease;
 }
 
-.splash-logo span{
-    font-family:'Bring Race', sans-serif !important;
-}
-
 .logo{
-    text-align:center;
     font-size:34px;
     margin-bottom:12px;
-    white-space:nowrap;
 }
 
-.logo span{
-    font-family:'Bring Race', sans-serif !important;
+.red{
+    color:#ff0000;
+    text-shadow:0 0 6px #ff0000, 0 0 12px #ff0000;
+    animation:glow 1.8s ease-in-out infinite alternate;
 }
 
 .white{
     color:white;
 }
 
-.red{
-    color:#ff0000;
+@keyframes glow{
+    from{
+        text-shadow:0 0 4px #ff0000;
+    }
+    to{
+        text-shadow:0 0 14px #ff0000,0 0 24px #ff0000;
+    }
 }
 
 @keyframes zoomSplash{
@@ -104,7 +110,7 @@ body{
 
 .app{
     width:100%;
-    max-width:380px;
+    max-width:400px;
     backdrop-filter:blur(12px);
     background:rgba(255,255,255,0.08);
     border:1px solid rgba(255,0,0,0.25);
@@ -121,10 +127,10 @@ body{
     font-size:13px;
 }
 
-#installBtn{
+button{
     width:100%;
     padding:14px;
-    margin-bottom:18px;
+    margin-bottom:12px;
     border:none;
     border-radius:12px;
     background:linear-gradient(90deg,#ff0000,#8b0000);
@@ -132,6 +138,19 @@ body{
     font-size:16px;
     font-weight:bold;
     cursor:pointer;
+}
+
+.quick-buttons{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+    margin-bottom:14px;
+}
+
+.quick-buttons button{
+    padding:10px;
+    font-size:14px;
+    margin:0;
 }
 
 label{
@@ -151,7 +170,6 @@ input, select{
     color:white;
     font-size:16px;
     text-align:center;
-    outline:none;
 }
 
 .resultado{
@@ -165,7 +183,6 @@ input, select{
     text-align:center;
     color:white;
     margin-bottom:10px;
-    font-size:18px;
 }
 
 .linha{
@@ -184,19 +201,11 @@ input, select{
     font-weight:bold;
 }
 
-@media (min-width:768px){
-    .app{
-        max-width:420px;
-        padding:28px;
-    }
-
-    .logo{
-        font-size:38px;
-    }
-
-    .splash-logo{
-        font-size:90px;
-    }
+.rendimento{
+    margin-top:12px;
+    color:white;
+    text-align:center;
+    font-size:14px;
 }
 </style>
 </head>
@@ -215,7 +224,21 @@ input, select{
 
     <div class="subtitle">Calculadora Profissional de Diluição</div>
 
-    <button id="installBtn">Instalar App</button>
+    <!-- Atalhos de diluição -->
+    <div class="quick-buttons">
+        <button onclick="setDil('1:10')">1:10</button>
+        <button onclick="setDil('1:20')">1:20</button>
+        <button onclick="setDil('1:30')">1:30</button>
+        <button onclick="setDil('1:50')">1:50</button>
+    </div>
+
+    <!-- Atalhos de volume -->
+    <div class="quick-buttons">
+        <button onclick="setVolume(500)">500ml</button>
+        <button onclick="setVolume(1000)">1L</button>
+        <button onclick="setVolume(2000)">2L</button>
+        <button onclick="setVolume(5000)">5L</button>
+    </div>
 
     <label>Diluição</label>
     <input type="text" id="diluicao" placeholder="Ex: 1:20">
@@ -239,18 +262,33 @@ input, select{
             <span class="label">Água</span>
             <span class="valor" id="agua">0 ml</span>
         </div>
+
+        <div class="rendimento" id="rendimento">
+            Rendimento: 0 L
+        </div>
     </div>
+
+    <button onclick="compartilharWhatsapp()">Compartilhar no WhatsApp</button>
 </div>
 
 <script>
+function setDil(valor){
+    document.getElementById("diluicao").value = valor;
+    calcular();
+}
+
+function setVolume(valor){
+    document.getElementById("volume").value = valor;
+    document.getElementById("unidade").value = "ml";
+    calcular();
+}
+
 function calcular() {
     let dil = document.getElementById("diluicao").value.trim();
     let volume = parseFloat(document.getElementById("volume").value);
     let unidade = document.getElementById("unidade").value;
 
     if (!dil.includes(":") || isNaN(volume) || volume <= 0) {
-        document.getElementById("produto").innerHTML = "0 ml";
-        document.getElementById("agua").innerHTML = "0 ml";
         return;
     }
 
@@ -261,17 +299,32 @@ function calcular() {
     let produto = volume / divisor;
     let agua = volume - produto;
 
+    let rendimento = (500 / produto).toFixed(1);
+
     document.getElementById("produto").innerHTML = produto.toFixed(1)+" ml";
     document.getElementById("agua").innerHTML = agua.toFixed(1)+" ml";
+    document.getElementById("rendimento").innerHTML =
+        "500ml rende até " + rendimento + "L";
+}
+
+function compartilharWhatsapp(){
+    let produto = document.getElementById("produto").innerText;
+    let agua = document.getElementById("agua").innerText;
+    let dil = document.getElementById("diluicao").value;
+
+    let texto = encodeURIComponent(
+        "TAZZO - Resultado da Diluição\n" +
+        "Diluição: " + dil + "\n" +
+        "Produto: " + produto + "\n" +
+        "Água: " + agua
+    );
+
+    window.open("https://wa.me/?text=" + texto, "_blank");
 }
 
 document.getElementById("diluicao").addEventListener("input", calcular);
 document.getElementById("volume").addEventListener("input", calcular);
 document.getElementById("unidade").addEventListener("change", calcular);
-
-document.getElementById("installBtn").onclick = function(){
-    alert("No iPhone: Compartilhar → Adicionar à Tela de Início");
-};
 </script>
 
 </body>
