@@ -61,8 +61,9 @@ body{
     font-family:'Bring Race', sans-serif !important;
 }
 
+/* reduzido ~5% */
 .splash-logo{
-    font-size:72px;
+    font-size:68px;
     animation:zoomSplash 1.4s ease;
 }
 
@@ -224,7 +225,8 @@ input, select{
 
     <div class="subtitle">Calculadora Profissional de Diluição</div>
 
-    <!-- Atalhos de diluição -->
+    <button id="installBtn">Instalar Calculadora</button>
+
     <div class="quick-buttons">
         <button onclick="setDil('1:10')">1:10</button>
         <button onclick="setDil('1:20')">1:20</button>
@@ -232,7 +234,6 @@ input, select{
         <button onclick="setDil('1:50')">1:50</button>
     </div>
 
-    <!-- Atalhos de volume -->
     <div class="quick-buttons">
         <button onclick="setVolume(500)">500ml</button>
         <button onclick="setVolume(1000)">1L</button>
@@ -272,6 +273,30 @@ input, select{
 </div>
 
 <script>
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+});
+
+document.getElementById("installBtn").addEventListener("click", async function(){
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+    if (isIOS) {
+        alert("No iPhone: toque em Compartilhar e depois em 'Adicionar à Tela de Início'.");
+        return;
+    }
+
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        deferredPrompt = null;
+    } else {
+        alert("A instalação ficará disponível após alguns segundos de uso da página.");
+    }
+});
+
 function setDil(valor){
     document.getElementById("diluicao").value = valor;
     calcular();
@@ -288,9 +313,7 @@ function calcular() {
     let volume = parseFloat(document.getElementById("volume").value);
     let unidade = document.getElementById("unidade").value;
 
-    if (!dil.includes(":") || isNaN(volume) || volume <= 0) {
-        return;
-    }
+    if (!dil.includes(":") || isNaN(volume) || volume <= 0) return;
 
     if (unidade === "l") volume *= 1000;
 
@@ -298,7 +321,6 @@ function calcular() {
 
     let produto = volume / divisor;
     let agua = volume - produto;
-
     let rendimento = (500 / produto).toFixed(1);
 
     document.getElementById("produto").innerHTML = produto.toFixed(1)+" ml";
